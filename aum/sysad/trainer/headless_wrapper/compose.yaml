@@ -33,11 +33,11 @@ services:
       - backup.dhthainguyen.edu.vn
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_healthy  
     restart: unless-stopped
 
   mysql:
-    image: mysql:8.0
+    image: mysql:5.6
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
