@@ -1,4 +1,3 @@
-# mysql/init.sh
 #!/bin/bash
 mysql -u root -p"${MYSQL_ROOT_PASSWORD}" <<EOF
 CREATE DATABASE IF NOT EXISTS app_db;
