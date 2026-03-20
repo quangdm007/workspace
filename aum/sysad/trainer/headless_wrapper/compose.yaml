@@ -1,0 +1,24 @@
+services:
+  wp.devlab.info.vn:
+    container_name: wp.devlab.info.vn
+    image: wordpress:6.5.4
+    volumes:
+      - ./wordpress/wp-content:/var/www/html/wp-content
+    ports:
+      - "8080:80"        
+    networks:
+      - backup.dhthainguyen.edu.vn
+    restart: unless-stopped
+
+  app.devlab.info.vn:
+    build: ./backup.dhthainguyen.edu.vn
+    container_name: app.devlab.info.vn
+    ports:
+      - "3000:3000"      
+    networks:
+      - backup.dhthainguyen.edu.vn
+    restart: unless-stopped
+
+networks:
+  backup.dhthainguyen.edu.vn:
+    driver: bridge
