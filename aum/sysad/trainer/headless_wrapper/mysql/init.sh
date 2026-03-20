@@ -1,0 +1,8 @@
+# mysql/init.sh
+#!/bin/bash
+mysql -u root -p"${MYSQL_ROOT_PASSWORD}" <<EOF
+CREATE DATABASE IF NOT EXISTS app_db;
+CREATE USER IF NOT EXISTS 'appuser'@'%' IDENTIFIED BY '${APP_PASSWORD}';
+GRANT ALL PRIVILEGES ON app_db.* TO 'appuser'@'%';
+FLUSH PRIVILEGES;
+EOF

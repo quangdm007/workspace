@@ -2,23 +2,63 @@ services:
   wp.devlab.info.vn:
     container_name: wp.devlab.info.vn
     image: wordpress:6.5.4
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: ${MYSQL_DB}
+      WORDPRESS_DB_USER: ${WP_USER}
+      WORDPRESS_DB_PASSWORD: ${WP_PASSWORD}
     volumes:
+      - wordpress_data:/var/www/html
       - ./wordpress/wp-content:/var/www/html/wp-content
     ports:
-      - "8080:80"        
+      - "127.0.0.1:8080:80"
     networks:
       - backup.dhthainguyen.edu.vn
+    depends_on:
+      mysql:
+        condition: service_healthy
     restart: unless-stopped
 
   app.devlab.info.vn:
     build: ./backup.dhthainguyen.edu.vn
     container_name: app.devlab.info.vn
+    environment:
+      DB_HOST: mysql
+      DB_NAME: ${APP_DB}
+      DB_USER: ${APP_USER}
+      DB_PASSWORD: ${APP_PASSWORD}
     ports:
-      - "3000:3000"      
+      - "127.0.0.1:3000:3000"
     networks:
       - backup.dhthainguyen.edu.vn
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_USER: ${WP_USER}
+      MYSQL_PASSWORD: ${WP_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - backup.dhthainguyen.edu.vn
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
 networks:
   backup.dhthainguyen.edu.vn:
     driver: bridge
+
+volumes:
+  wordpress_data:
+  mysql_data:
