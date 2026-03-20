@@ -3,10 +3,17 @@ services:
     container_name: wp.devlab.info.vn
     image: wordpress:6.5.4
     environment:
+<<<<<<< HEAD
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+=======
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: wordpress_db
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wp_strong_password
+>>>>>>> 02cbd143caee02de5565f79258b0246b07a6bba5
     volumes:
       - wordpress_data:/var/www/html
       - ./wordpress/wp-content:/var/www/html/wp-content
@@ -23,10 +30,17 @@ services:
     build: ./backup.dhthainguyen.edu.vn
     container_name: app.devlab.info.vn
     environment:
+<<<<<<< HEAD
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+=======
+      DB_HOST: mysql
+      DB_NAME: app_db
+      DB_USER: appuser
+      DB_PASSWORD: app_strong_password
+>>>>>>> 02cbd143caee02de5565f79258b0246b07a6bba5
     ports:
       - "127.0.0.1:3000:3000"
     networks:
@@ -39,17 +53,24 @@ services:
   mysql:
     image: mysql:8.0
     environment:
+<<<<<<< HEAD
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${WORDPRESS_DB_USER}
       MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+=======
+      MYSQL_ROOT_PASSWORD: root_strong_password
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wp_strong_password
+>>>>>>> 02cbd143caee02de5565f79258b0246b07a6bba5
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql/init.sh:/docker-entrypoint-initdb.d/init.sh
     networks:
       - backup.dhthainguyen.edu.vn
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_strong_password"]
       interval: 10s
       timeout: 5s
       retries: 5
